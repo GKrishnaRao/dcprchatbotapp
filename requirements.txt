@@ -1,0 +1,11 @@
+groq
+langchain-groq
+pymilvus
+pdfplumber
+pymilvus[model]
+torch
+openai
+FlagEmbedding
+langchain
+streamlit
+langchain_community
