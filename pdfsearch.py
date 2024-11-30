@@ -57,9 +57,9 @@ def initialize_system():# Use the initialized client
             uri=os.getenv("MILVUS_URI"),
             token=os.getenv("MILVUS_TOKEN")
         )
-        st.success("Successfully connected to Milvus")
+        st.success("Successfully connected")
     except Exception as e:
-        st.error(f"Failed to connect to Milvus: {e}")
+        st.error(f"Failed to connect: {e}")
         return None, None
 
     try:
@@ -184,7 +184,7 @@ def main():
         st.session_state.ef, st.session_state.collection = initialize_system()
         if st.session_state.ef and st.session_state.collection:
             st.session_state.initialized = True
-            st.success(f"Connected to collection with {st.session_state.collection.num_entities} documents")
+            #st.success(f"Connected to collection with {st.session_state.collection.num_entities} documents")
 
     print("Collection schema details:")
     for field in st.session_state.collection.schema.fields:
@@ -197,19 +197,21 @@ def main():
     if query:
         with st.spinner("Searching for answers..."):
             try:
-                print("Started")
                 # Generate embeddings for query
                 query_embeddings = st.session_state.ef([query])
                 
+                 # Display results
+                st.subheader("Answer")
+                
                 # Perform searches with error handling
                 try:
-                    with st.spinner("Performing dense search..."):
+                    with st.spinner("Fetching answer..."):
                         dense_results = dense_search(st.session_state.collection, query_embeddings["dense"][0])
                     
-                    with st.spinner("Performing sparse search..."):
+                    with st.spinner("Fetching answer..."):
                         sparse_results = sparse_search(st.session_state.collection, query_embeddings["sparse"][[0]])
                     
-                    with st.spinner("Performing hybrid search..."):
+                    with st.spinner("Fetching answer..."):
                         hybrid_results = hybrid_search(
                             st.session_state.collection,
                             query_embeddings["dense"][0],
@@ -220,9 +222,6 @@ def main():
                 except Exception as search_error:
                     st.error(f"Search operation failed: {str(search_error)}")
                 
-                
-                # Display results
-                st.subheader("Answer")
                 
                 final_template = f"""
                 You are an Legal expert Real Estate Agent assistant providing detailed and accurate information. The user has asked the following question:
