@@ -9,3 +9,4 @@ FlagEmbedding
 langchain
 streamlit
 langchain_community
+Flask

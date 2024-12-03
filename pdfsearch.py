@@ -15,15 +15,12 @@ from pymilvus import (
     WeightedRanker,
 )
 from groq import Groq
-import os
-from dotenv import load_dotenv
-load_dotenv()
 
 
 # Initialize Groq client with error handling
 def initialize_groq_client():
     try:
-        groq_api_key = os.getenv("GROQ_API_KEY")
+        groq_api_key = "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"
         if not groq_api_key:
             st.error("GROQ_API_KEY environment variable is not set")
             return None
@@ -54,8 +51,8 @@ def initialize_system():# Use the initialized client
     try:
         connections.connect(
             alias="default",
-            uri=os.getenv("MILVUS_URI"),
-            token=os.getenv("MILVUS_TOKEN")
+            uri="https://in03-4e569f605c32eab.serverless.gcp-us-west1.cloud.zilliz.com",
+            token="99cd003de770782d436a049c87fb669188dc4424443531a325043d7f42859ca8c3d058b952d2e92d33677cf72b4931d12150c29d"
         )
         st.success("Successfully connected")
     except Exception as e:

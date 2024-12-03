@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document Q&A System</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .ai-response {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            white-space: pre-wrap; /* Preserves line breaks and spaces */
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .source-results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        /* Style for code blocks if any */
+        .ai-response pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chat With Real AI</h1>
+        <input type="text" id="query" class="search-box" placeholder="Enter your question...">
+        <button onclick="search()">Search</button>
+        <div id="results" class="results"></div>
+    </div>
+
+    <script>
+        function formatResponse(text) {
+            // Replace newlines with <br> tags
+            text = text.replace(/\n/g, '<br>');
+            
+            // Handle markdown-style bold text
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Handle markdown-style italic text
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            return text;
+        }
+
+        function search() {
+            const query = document.getElementById('query').value;
+            if (!query) return;
+
+            // Show loading state
+            document.getElementById('results').innerHTML = 'Loading...';
+
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('results');
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                } else {
+                    let html = '<div class="ai-response">';
+                    html += '<h2>Answer:</h2>';
+                    html += `<div>${formatResponse(data.answer)}</div>`;
+                    html += '</div>';
+                    
+                    //html += '<div class="source-results">';
+                    //html += '<h2>Source Information:</h2>';
+                    //html += `<div>${data.results.map(result => formatResponse(result)).join('<br><br>')}</div>`;
+                    //html += '</div>';
+                    
+                    resultsDiv.innerHTML = html;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('results').innerHTML = 
+                    `<p style="color: red;">An error occurred while fetching results.</p>`;
+            });
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('query').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
+    </script>
+</body>
+</html>
