@@ -10,3 +10,16 @@ langchain
 streamlit
 langchain_community
 Flask
+
+
+faiss-cpu
+PyPDF2
+langchain_google_genai
+python-dotenv
+pypdf
+pinecone-client
+fastapi
+pydantic
+typing
+uvicorn
+requests

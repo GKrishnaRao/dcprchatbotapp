@@ -20,11 +20,11 @@ from groq import Groq
 # Initialize Groq client with error handling
 def initialize_groq_client():
     try:
-        groq_api_key = "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"
+        groq_api_key = "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"
         if not groq_api_key:
             st.error("GROQ_API_KEY environment variable is not set")
             return None
-            
+
         # Simple initialization without additional parameters
         client = Groq(
             api_key=groq_api_key
@@ -70,7 +70,7 @@ def initialize_system():# Use the initialized client
                     FieldSchema(name="dense_vector", dtype=DataType.FLOAT_VECTOR, dim=1024),
                 ]
         schema = CollectionSchema(fields)
-                
+
         collection_name = "hybrid_demo"
         col = Collection(
         name=collection_name,
@@ -83,9 +83,9 @@ def initialize_system():# Use the initialized client
         return ef, col
     except Exception as e:
         st.error(f"Failed to connect to Milvus: {e}")
-        return None, None    
-    
-    
+        return None, None
+
+
 def dense_search(col, query_dense_embedding, limit=5):
     search_params = {"metric_type": "IP", "params": {}}
     res = col.search(
@@ -110,12 +110,12 @@ def sparse_search(col, query_sparse_embedding, limit=5):
         return [hit.get("text") for hit in res]
     except Exception as e:
         st.error(f"Failed to connect to Milvus: {e}")
-        return None, None 
+        return None, None
 
 def hybrid_search(col,query_dense_embedding,query_sparse_embedding,sparse_weight=1.0,dense_weight=1.0,limit=5):
     try:
         dense_search_params = {"metric_type": "IP", "params": {}}
-        
+
         dense_req = AnnSearchRequest(
             [query_dense_embedding], "dense_vector", dense_search_params, limit=limit
         )
@@ -175,7 +175,7 @@ def format_result(text, max_length=200):
 
 def main():
     st.title("Chat With Real AI")
-    
+
     # Initialize system if not already done
     if not st.session_state.initialized:
         st.session_state.ef, st.session_state.collection = initialize_system()
@@ -186,28 +186,28 @@ def main():
     print("Collection schema details:")
     for field in st.session_state.collection.schema.fields:
         print(f"Field: {field.name}, Type: {field.dtype}, Params: {field.params}")
-            
+
     # Query interface
     st.subheader("Ask Questions")
     query = st.text_input("Enter your question:")
-    
+
     if query:
         with st.spinner("Searching for answers..."):
             try:
                 # Generate embeddings for query
                 query_embeddings = st.session_state.ef([query])
-                
+
                  # Display results
                 st.subheader("Answer")
-                
+
                 # Perform searches with error handling
                 try:
                     with st.spinner("Fetching answer..."):
                         dense_results = dense_search(st.session_state.collection, query_embeddings["dense"][0])
-                    
+
                     with st.spinner("Fetching answer..."):
                         sparse_results = sparse_search(st.session_state.collection, query_embeddings["sparse"][[0]])
-                    
+
                     with st.spinner("Fetching answer..."):
                         hybrid_results = hybrid_search(
                             st.session_state.collection,
@@ -218,8 +218,8 @@ def main():
                         )
                 except Exception as search_error:
                     st.error(f"Search operation failed: {str(search_error)}")
-                
-                
+
+
                 final_template = f"""
                 You are an Legal expert Real Estate Agent assistant providing detailed and accurate information. The user has asked the following question:
                 **Question:** {query}
@@ -230,7 +230,7 @@ def main():
 
                 **Instruction:** Use only the query-relevant content from the retrieved information to answer the question. Focus on providing a detailed comprehensive, informative response based solely on the given data. If any conflicting details are present, prioritize the most reliable and consistent information.
                 """
-                
+
                 if client is None:
                     st.warning("Groq client not initialized. Please check your API key.")
                     return False
@@ -242,16 +242,19 @@ def main():
                             "content": final_template,
                         }
                     ],
-                    model="llama-3.1-70b-versatile",
+                    model="llama-3.3-70b-versatile",
                     )
                     st.write(chat_completion.choices[0].message.content)
                 except Exception as e:
                     st.error(f"Groq connection test failed: {str(e)}")
                     return False
-            
+
             except Exception as e:
                 st.error(f"An error occurred during search: {str(e)}")
                 st.error("Please try again with a different query.")
 
 if __name__ == "__main__":
     main()
+
+
+

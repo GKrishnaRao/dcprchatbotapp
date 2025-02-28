@@ -2,12 +2,13 @@ from flask import Flask, render_template, request, jsonify
 import torch
 from milvus_model.hybrid import BGEM3EmbeddingFunction
 from pymilvus import (
-    FieldSchema, CollectionSchema, DataType, 
+    FieldSchema, CollectionSchema, DataType,
     connections, Collection, AnnSearchRequest, WeightedRanker
 )
 from groq import Groq
 import os
 from dotenv import load_dotenv
+
 
 app = Flask(__name__)
 load_dotenv()
@@ -19,7 +20,7 @@ groq_client = None
 
 def initialize_system():
     global ef, collection, groq_client
-    
+
     # Initialize Groq client
     try:
         groq_api_key = os.getenv("GROQ_API_KEY")
@@ -32,7 +33,7 @@ def initialize_system():
     # Initialize embedding function
     device = "mps" if torch.backends.mps.is_available() else "cpu"
     ef = BGEM3EmbeddingFunction(use_fp16=False, device=device)
-    
+
     # Connect to Milvus
     try:
         connections.connect(
@@ -52,7 +53,7 @@ def initialize_system():
             FieldSchema(name="dense_vector", dtype=DataType.FLOAT_VECTOR, dim=1024),
         ]
         schema = CollectionSchema(fields)
-        
+
         collection = Collection(
             name="hybrid_demo",
             schema=schema,
@@ -74,7 +75,7 @@ def home():
 def search():
     if not init_success:
         return jsonify({'error': init_message}), 500
-    
+
     query = request.json.get('query')
     if not query:
         return jsonify({'error': 'No query provided'}), 400
@@ -82,7 +83,7 @@ def search():
     try:
         # Generate embeddings
         query_embeddings = ef([query])
-        
+
         # Perform hybrid search
         hybrid_results = hybrid_search(
             collection,
@@ -102,7 +103,7 @@ def search():
 
                 **Instruction:** Use only the query-relevant content from the retrieved information to answer the question. Focus on providing a detailed comprehensive, informative response based solely on the given data. If any conflicting details are present, prioritize the most reliable and consistent information.
                 """
-        
+
         # Get response from Groq
         chat_completion = groq_client.chat.completions.create(
                messages=[
@@ -111,7 +112,8 @@ def search():
                             "content": final_template,
                         }
                     ],
-                    model="llama-3.1-70b-versatile",
+                    #model="llama-3.1-70b-versatile",
+                    model="llama-3.1-8b-instant",
                     )
 
         # Extract the response
@@ -129,22 +131,22 @@ def search():
 def hybrid_search(col, query_dense_embedding, query_sparse_embedding, sparse_weight=1.0, dense_weight=1.0, limit=5):
     try:
         dense_req = AnnSearchRequest(
-            [query_dense_embedding], 
-            "dense_vector", 
-            {"metric_type": "IP", "params": {}}, 
+            [query_dense_embedding],
+            "dense_vector",
+            {"metric_type": "IP", "params": {}},
             limit=limit
         )
         sparse_req = AnnSearchRequest(
-            [query_sparse_embedding], 
-            "sparse_vector", 
-            {"metric_type": "IP", "params": {}}, 
+            [query_sparse_embedding],
+            "sparse_vector",
+            {"metric_type": "IP", "params": {}},
             limit=limit
         )
         rerank = WeightedRanker(sparse_weight, dense_weight)
         res = col.hybrid_search(
-            [sparse_req, dense_req], 
-            rerank=rerank, 
-            limit=limit, 
+            [sparse_req, dense_req],
+            rerank=rerank,
+            limit=limit,
             output_fields=["text"]
         )[0]
         return [hit.get("text") for hit in res]
@@ -152,4 +154,4 @@ def hybrid_search(col, query_dense_embedding, query_sparse_embedding, sparse_wei
         return None
 
 if __name__ == '__main__':
-    app.run(host="82.112.230.225", port=8000)
+    app.run(host="0.0.0.0", port=8502)

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "blaze-smart-attendance",
+  "private_key_id": "733a69923c195b5b4b4e2ea290c531d3e30f4ce1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC3ZrF25UckuNQQ\nmEwymUJ5Y/Qh7RvMftlX4S6h1JW9//mkNexLIBNw1q5fiL8fG8mtwtgg5a61efZ7\nY+ZpYzXHW8NhAiVogWhoJ2Qiy/cvIotGsNMUuggvLE/zdP8bjnk8ZXfIiQq/Sx4C\nuzYfBoGzL2WlCCR/yI5+V9S7U6vWNUdk04YvAfl0Q4bmK4gfiYcQyRX3F6EhKIo5\n4dIMxo9A0Akxg0NHa7dUFAzZBtkVoQ/cbh9KNviA31fbut4giBsUJaSTiFd/Ji5y\nxx8ebW9KwW1Tn0MYHvdCDgjMGu5qd0w6QS/XFTvzsO7n7vjZvp2QW1QZ/NeZFmZh\nr/iHeWXPAgMBAAECggEAEdWwAUaXlGsceDncAxM86YgX6BEVbt2RB8cGnWC9m3q5\ns8dooWYCB5GUGgc2xFdgu+Yioiq9XB/hoV5cIp7hGz0BswlqsNuqVwj2Z50OsXjT\nzKQj/edMJdlsM8BXXiTABmijOg8vMKrYRSsgC4SHw71V6AAMNWVZi52OVHv1ATRs\np9uXewmPqSx3xCy6SSebgSwmoiRiphLWGVtgsfDiAl1ped+ffSHO0WUOA+vGm1w0\nL73x+aYp0BhN2EwJ0U/xnTs4Il/MK04QZFpFAynBcxM8vKez1/Hhaf6edFYE+AKh\nVgqhyS6G9RV2VfpwGzO3j4UcgNe3zytussyVNXWmIQKBgQDtEVn+KRcCyMrBKyXb\ngyquMWqdhd+FnqGhb66OHevqU55epmtaYG54twKklzSyWVUqmC/fJZonVSg4SEQk\nWX/HzvQ0CeN1y1+jPB50rXNcpxpeu9Q/xv9GCULL/YN2rod/xTN9tL1TtZupjJlE\nvffad3Vnk679CdbhgkZ9e3D37wKBgQDGDCxTRrh0kMlVWTceooEqP1N88xF1Foif\nIvRIVbQILYP4cX5sEkiI+FAGqvu3htPJ9DWiNygvMxwXEn6O2uO35fKMc4WVmSiK\nMUs48WXcgaqPKmhdy5f1nDwKrJDRz8GM6EJNya+srgI89sDJR6bit3hCD96VgHXW\nLFP8ab2QIQKBgQDJ0D6rNnGnZiXs4f19bKE1302iweeyCYQROVEBHQnL1tl4O/Yh\n3vvMegee9DXhKlltRFdkgM9FcqIln6eaxjIYd96+OjjP+4z0GmbW7x3JH1w8j2u1\ny4NfLN0XaT60Fwm0xLz745RVIcJdSRrlQU8xRQbGYRvTv7+VBGFby201MwKBgQCe\ns8CNVx2W4zNDPoPJ+8TvuuFHPmzd3BnNFDCXCn6DEx4u55u8NIaFpB5UyY1+yv9K\nVXTpMbP05sr6vipGhad3hT/xRt1kPOBcpRW3YtISeqHXqc8KYoy6F+GRWCmQyCA8\nrx36wcUR5jsK6V0hrlZQVV976MWgHdnPr6P5oC50oQKBgQCVHFHFafVGjJ084+0w\nF5tAL8qmyiwkjD9dQPRYUGIieieLG8PXJyxOjgQUR2Ifuqaq40z8OPYVKCn0+H2b\nUFoyf17L/q/0GMOdBcWCVxFbGEU+dS8ZV9BjGeiijOGzN0Z7gJkJSLdQCK4F90kg\nFkpUSCzZUUMdfj5YEZ5WnmkQ5w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@blaze-smart-attendance.iam.gserviceaccount.com",
+  "client_id": "103346803700799376160",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40blaze-smart-attendance.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
